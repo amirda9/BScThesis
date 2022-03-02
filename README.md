@@ -9,3 +9,4 @@ andyCNN.py loads all the data from the eyes/ and testeyes/ dirs to train the mod
 eyetrack.py collects the pupil data by moving your cursor around the screen and having you follow its tip around.
 
 testEyes.py evaluates the models I've trained. 
+# BScThesis
