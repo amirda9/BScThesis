@@ -8,6 +8,14 @@ import torch.nn as nn
 import pyautogui
 import matplotlib.pyplot as plt
 
+from pymouse import PyMouse
+from pykeyboard import PyKeyboard
+
+m = PyMouse()
+k = PyKeyboard()
+
+print(m.screen_size())
+
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -154,6 +162,7 @@ def eyetrack(xshift = 30, yshift=150, frameShrink = 0.15):
 
 
     webcam = cv.VideoCapture(0)
+    print(webcam.isOpened())
     mvAvgx = []
     mvAvgy = []
     scale = 10
@@ -173,15 +182,15 @@ def eyetrack(xshift = 30, yshift=150, frameShrink = 0.15):
             left_eye = process(left_eye)
 
 
-            x = ensembleX(left_eye)*1440-xshift
-            y = fiv(left_eye).item()*900-yshift
-
+            x = ensembleX(left_eye)*3000-xshift
+            y = fiv(left_eye).item()*1080-yshift
 
 
 
             avx = sum(mvAvgx)/scale
             avy = sum(mvAvgy)/scale
-            print(avx,avy)
+            # print(avx,avy)
+            # print(x,y)
 
             mvAvgx.append(x)
             mvAvgy.append(y)
@@ -203,8 +212,10 @@ def eyetrack(xshift = 30, yshift=150, frameShrink = 0.15):
                 # else:
                 #     mvAvgx = mvAvgx[1:]
                 #     mvAvgy = mvAvgy[1:]
-                pyautogui.moveTo(720,450)
-                pyautogui.moveTo(avx,avy)
+                # pyautogui.moveTo(720,450)h
+                # pyautogui.moveTo(avx,avy)
+                pyautogui.moveTo(x,y)
+
 
 
 
