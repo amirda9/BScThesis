@@ -55,11 +55,11 @@ model.add(Conv2D(32, 3, 2, activation = 'relu', input_shape = (12, 44, 3)))
 model.add(Conv2D(64, 2, 2, activation = 'relu'))
 model.add(Flatten())
 model.add(Dense(32, activation = 'relu'))
-model.add(Dense(2, activation = 'sigmoid'))
+model.add(Dense(2, activation = 'linear'))
 model.compile(optimizer = "adam", loss = "mean_squared_error")
 model.summary()
 
-epochs = 200
+epochs = 20
 X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2,random_state=42)
 print(X_train.shape, X_test.shape, Y_train.shape, Y_test.shape)
 for epoch in range(epochs):
@@ -68,6 +68,7 @@ for epoch in range(epochs):
 while True:
   eyes = scan()
   if not eyes is None:
+    print(eyes.shape)
     eyes = np.expand_dims(eyes / 255.0, axis = 0)
     x, y = model.predict(eyes)[0]
     print(x,y)
