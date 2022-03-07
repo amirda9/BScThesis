@@ -38,7 +38,7 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
         # calculate the ratio of the height and construct the
         # dimensions
         r = height / float(h)
-        dim = (int(w * r), height)
+        dim = (int(w * r), height) 
 
     # otherwise, the height is None
     else:
@@ -76,7 +76,7 @@ Y = np.array(Y)
 print(X.shape, Y.shape)
 
 
-epochs = 30
+epochs = 10
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=30)
 print('\n\n')
