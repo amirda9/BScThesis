@@ -76,7 +76,7 @@ Y = np.array(Y)
 print(X.shape, Y.shape)
 
 
-epochs = 10
+epochs = 100
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=30)
 print('\n\n')
@@ -144,7 +144,7 @@ history = model.fit(X_train, Y_train, epochs=epochs, batch_size=32,
 model.save('my_model.h5')  # creates a HDF5 file 'my_model.h5'
 
 
-print(history.history.keys())
+# print(history.history.keys())
 # plt.plot(history.history['loss'])
 # plt.plot(history.history['val_loss'])
 # plt.title('model loss')
@@ -187,7 +187,7 @@ print(history.history.keys())
 #               for i in range(68):
 #                   img = cv2.circle(img, (shape.part(i).x, shape.part(
 #                       i).y), 1, (255, 255, 255), thickness=5)
-#         img = image_resize(img,width=200)
+#         img = image_resize(img,width=400)
 #         img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 #         img = np.expand_dims(img, axis=2)
 #         cv2.imshow("img", img)
@@ -199,6 +199,7 @@ print(history.history.keys())
         
 #       else:
 #         pass
+    
 #       if cv2.waitKey(1) == ord('q'):
 #           break
       
