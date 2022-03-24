@@ -1,12 +1,9 @@
-from turtle import width
 from pynput.mouse import Listener
-import logging
 import sys
 import time
 import cv2 as cv
 import os
 import numpy as np
-import dlib
 
 cascade = cv.CascadeClassifier("Final/haarcascade_eye.xml")
 
@@ -74,7 +71,7 @@ def on_click(X, Y, button, pressed):
 
         j=0
         # capital x and y are click position
-        while(j<4):
+        while(j<3):
             _, image = cam.read()
             now = time.time()
             img = process(image)

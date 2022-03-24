@@ -76,6 +76,15 @@ Y = np.array(Y)
 print(X.shape, Y.shape)
 
 
+fig = plt.subplots(figsize =(10, 7))
+# Creating plot
+plot.hist2d(Y)
+plot.title("Simple 2D Histogram")
+  
+# show plot
+plot.show()
+
+
 epochs = 100
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=30)
