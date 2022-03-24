@@ -37,13 +37,13 @@ def scan(image_size=(32, 32)):
 # coordinates are reported starting at (0, 0), not (1, 1)
 width, height = 1920, 1080
 
-filepaths = os.listdir("Da9_itis/v1")
+filepaths = os.listdir("Da9_itis/model1/v1")
 X, Y = [], []
 for filepath in filepaths:
   x, y, _ = filepath.split(' ')
   x = float(x) / width
   y = float(y) / height
-  X.append(cv2.imread("Da9_itis/v1/" + filepath))
+  X.append(cv2.imread("Da9_itis/model1/v1/" + filepath))
   Y.append([x, y])
   print([x,y],filepath)
 X = np.array(X) / 255.0

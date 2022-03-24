@@ -5,6 +5,7 @@ import tensorflow as tf
 from keras_preprocessing import sequence
 from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
+from keras_self
 
 
 
@@ -37,7 +38,7 @@ x_test = sequence.pad_sequences(x_train,maxlen=max_len,truncating='post',padding
 model = Sequential()
 model.add(Embedding(vocab_size,100,input_length=max_len))
 model.add(Bidirectional(LSTM(units=16,dropout=0.5,return_sequences=True,recurrent_dropout=0.7)))
-model.add(SeqSelfA)
+model.add(SeqSe)
 
 
 model.summary()
