@@ -71,7 +71,7 @@ def on_click(X, Y, button, pressed):
 
         j=0
         # capital x and y are click position
-        while(j<3):
+        while(j<2):
             _, image = cam.read()
             now = time.time()
             img = process(image)
