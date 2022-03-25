@@ -71,15 +71,15 @@ def on_click(X, Y, button, pressed):
 
         j=0
         # capital x and y are click position
-        while(j<2):
+        while(j<4):
             _, image = cam.read()
             now = time.time()
             img = process(image)
             RI,LI = get_eye(image)
             if (RI is not None) and (LI is not None):
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/data/' , "Face,{},{},{}.jpg".format(X,Y,now)), img)
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/data/' , "RI,{},{},{}.jpg".format(X,Y,now)), RI)
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/data/' , "LI,{},{},{}.jpg".format(X,Y,now)), LI)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "Face,{},{},{}.jpg".format(X,Y,now)), img)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "RI,{},{},{}.jpg".format(X,Y,now)), RI)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "LI,{},{},{}.jpg".format(X,Y,now)), LI)
                 print(X,Y,img.shape,RI.shape,LI.shape)
             
             
