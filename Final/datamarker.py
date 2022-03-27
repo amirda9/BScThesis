@@ -70,4 +70,4 @@ for i in range(valF.shape[0]):
     print(a.shape)
     a = cv2.circle(a, (int(valY[i][0]*150), int(valY[i][1]*200)), 5, (255,255,0), -1)
     a = cv2.circle(a, (int(pred[i][0]*150), int(pred[i][1]*200)), 5, (0,0,255), -1)
-    cv2.imwrite('./markedtest/' + str(i) + '.jpg', a)
+    cv2.imwrite('./markedval/' + str(i) + '.jpg', a)
