@@ -12,10 +12,12 @@ def plot(data, title, save_path):
 
     cm = LinearSegmentedColormap.from_list('sample', colors)
 
+    my_dpi = 100
+    plt.figure(figsize=(1920/my_dpi, 1080/my_dpi), dpi=my_dpi)
     plt.imshow(data, cmap=cm)
     plt.colorbar()
     plt.title(title)
-    plt.savefig(save_path)
+    plt.savefig(save_path,dpi= my_dpi)
     plt.close()
 
 if __name__ == "__main__":
@@ -26,4 +28,4 @@ if __name__ == "__main__":
     # Smooth it to create a "blobby" look
     data = filters.gaussian_filter(data,sigma=15)
 
-    plot(data, 'Sample plot', 'sample.jpg')
+    plot(data, 'Sentence Heatmap', 'Heatmap.jpg')

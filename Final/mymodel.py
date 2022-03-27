@@ -1,6 +1,7 @@
 from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
+import tensorflow as tf
 import os
 import numpy as np
 import cv2 
@@ -97,48 +98,60 @@ if __name__ == '__main__':
     
     # ________________________ MODEL ________________________
     
-    eyeInputR = Input((30,60,1))
-    eyeInputL = Input((30,60,1))
-    faceInput = Input((150,200,1))
+    # eyeInputR = Input((30,60,1))
+    # eyeInputL = Input((30,60,1))
+    # faceInput = Input((150,200,1))
     
     
     
-    # Right eye
-    RE = Conv2D(96, (6, 3), activation='relu')(eyeInputR)
-    RE = (AveragePooling2D(pool_size=(2, 2)))(RE)
-    RE = (Conv2D(384,(3, 3), activation='relu'))(RE)
-    RE = (Conv2D(256,(3, 3), activation='relu'))(RE)
-    RE = (Flatten())(RE)
-    RE = (Dense(8, activation='linear'))(RE)
+    # # Right eye
+    # RE = Conv2D(96, (6, 3), activation='relu')(eyeInputR)
+    # RE = (AveragePooling2D(pool_size=(2, 2)))(RE)
+    # RE = (Conv2D(384,(3, 3), activation='relu'))(RE)
+    # RE = (Conv2D(256,(3, 3), activation='relu'))(RE)
+    # RE = (Flatten())(RE)
+    # RE = (Dense(8, activation='linear'))(RE)
     
     
     
-    # Left eye
-    LE = Conv2D(96, (6, 3), activation='relu')(eyeInputL)
-    LE = (AveragePooling2D(pool_size=(2, 2)))(LE)
-    LE = (Conv2D(384,(3, 3), activation='relu'))(LE)
-    LE = (Conv2D(256,(3, 3), activation='relu'))(LE)
-    LE = (Flatten())(LE)
-    LE = (Dense(8, activation='linear'))(LE)
+    # # Left eye
+    # LE = Conv2D(96, (6, 3), activation='relu')(eyeInputL)
+    # LE = (AveragePooling2D(pool_size=(2, 2)))(LE)
+    # LE = (Conv2D(384,(3, 3), activation='relu'))(LE)
+    # LE = (Conv2D(256,(3, 3), activation='relu'))(LE)
+    # LE = (Flatten())(LE)
+    # LE = (Dense(8, activation='linear'))(LE)
     
     
-    # face
-    Face = (Conv2D(96, (9, 12), activation='relu', input_shape=(150, 200, 1)))(faceInput)
-    Face = (AveragePooling2D(pool_size=(3, 3)))(Face)
-    Face = (Conv2D(256, (5, 5), activation='relu'))(Face)
-    Face = (AveragePooling2D(pool_size=(3, 3))) (Face)
-    Face = (Conv2D(384, (3, 3), activation='relu'))(Face)
-    Face = (Conv2D(256, (3, 3), activation='relu'))(Face)
-    Face = (Conv2D(128, (3, 3), activation='relu') )(Face)
-    Face = (Flatten())(Face)
-    Face = (Dense(16, activation='linear') )(Face)
+    # # face
+    # Face = (Conv2D(96, (9, 12), activation='relu', input_shape=(150, 200, 1)))(faceInput)
+    # Face = (AveragePooling2D(pool_size=(3, 3)))(Face)
+    # Face = (Conv2D(256, (5, 5), activation='relu'))(Face)
+    # Face = (AveragePooling2D(pool_size=(3, 3))) (Face)
+    # Face = (Conv2D(384, (3, 3), activation='relu'))(Face)
+    # Face = (Conv2D(256, (3, 3), activation='relu'))(Face)
+    # Face = (Conv2D(128, (3, 3), activation='relu') )(Face)
+    # Face = (Flatten())(Face)
+    # Face = (Dense(16, activation='linear') )(Face)
     
-    res = Concatenate()([RE, LE, Face])
-    res = Dense(2, activation='linear')(res)
-    model = Model(inputs=[eyeInputR, eyeInputL, faceInput], outputs=res)
+    # res = Concatenate()([RE, LE, Face])
+    # res = Dense(2, activation='linear')(res)
+    # model = Model(inputs=[eyeInputR, eyeInputL, faceInput], outputs=res)
+
+
+    model = tf.keras.models.load_model('./eyemodel.h5')
+
+
     print(model.summary())
     model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['mae'])
     history = model.fit(x=[dataR, dataL, dataF], y=Y, epochs=100, batch_size=8 , validation_data = ( [valR, valL, valF], valY))
-    pickle.dump( history, open( "data.p", "wb" ) )
 
-    model.save('./model.h5')
+    model.save('./eyemodel.h5')
+
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.show()
