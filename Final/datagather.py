@@ -5,7 +5,7 @@ import cv2 as cv
 import os
 import numpy as np
 
-cascade = cv.CascadeClassifier("Final/haarcascade_eye.xml")
+cascade = cv.CascadeClassifier("/home/amir/Desktop/Webcam-Eyetracking/Final/haarcascade_eye.xml")
 
 def image_resize(image, width = None, height = None, inter = cv.INTER_AREA):
     # initialize the dimensions of the image to be resized and
@@ -71,15 +71,15 @@ def on_click(X, Y, button, pressed):
 
         j=0
         # capital x and y are click position
-        while(j<4):
+        while(j<2):
             _, image = cam.read()
             now = time.time()
             img = process(image)
             RI,LI = get_eye(image)
             if (RI is not None) and (LI is not None):
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "Face,{},{},{}.jpg".format(X,Y,now)), img)
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "RI,{},{},{}.jpg".format(X,Y,now)), RI)
-                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/VAL/' , "LI,{},{},{}.jpg".format(X,Y,now)), LI)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/newdata/' , "Face,{},{},{}.jpg".format(X,Y,now)), img)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/newdata/' , "RI,{},{},{}.jpg".format(X,Y,now)), RI)
+                cv.imwrite(os.path.join('/home/amir/Desktop/Webcam-Eyetracking/Final/newdata/' , "LI,{},{},{}.jpg".format(X,Y,now)), LI)
                 print(X,Y,img.shape,RI.shape,LI.shape)
             
             

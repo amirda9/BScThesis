@@ -4,18 +4,18 @@ import os
 import tensorflow as tf
 
 
-filepaths = os.listdir("./VAL/")
+filepaths = os.listdir("./TEST/")
 valF,valR,valL, valY = [], [],[],[]
 for filepath in filepaths:
     kind,x, y, _ = filepath.split(',')
     if kind == 'Face':
-        a = cv2.imread("./VAL/" + filepath, cv2.IMREAD_GRAYSCALE)
+        a = cv2.imread("./TEST/" + filepath, cv2.IMREAD_GRAYSCALE)
         a = cv2.resize(a, (200,150), interpolation = cv2.INTER_AREA)
         a = np.expand_dims(a, axis=2)
         b_path = filepath.replace('Face', 'RI')
-        b = cv2.imread("./VAL/" + b_path, cv2.IMREAD_GRAYSCALE)
+        b = cv2.imread("./TEST/" + b_path, cv2.IMREAD_GRAYSCALE)
         c_path = filepath.replace('Face', 'LI')
-        c = cv2.imread("./VAL/" + c_path, cv2.IMREAD_GRAYSCALE)
+        c = cv2.imread("./TEST/" + c_path, cv2.IMREAD_GRAYSCALE)
         try:
             b = np.expand_dims(b, axis=2)
             c = np.expand_dims(c, axis=2)
@@ -43,7 +43,7 @@ model = tf.keras.models.load_model('./eyemodel.h5')
 
 model.summary()
 
-# model.evaluate([valR, valL,valF], valY)
+model.evaluate([valR, valL,valF], valY)
 
 pred = model.predict([valR, valL,valF])
 # print(pred)
@@ -64,12 +64,12 @@ pred = model.predict([valR, valL,valF])
 # cv2.waitKey(0)
     
 for i in range(valF.shape[0]):
-    print(valF[i].shape)
+    # print(valF[i].shape)
     a = cv2.flip(valF[i], 1)
     a = np.expand_dims(a, axis=2)
-    print(a.shape)
+    # print(a.shape)
     # ground truth is white
     a = cv2.circle(a, (int(valY[i][0]*150), int(valY[i][1]*200)), 5, (255,255,255), -1)
     # pred is black
     a = cv2.circle(a, (int(pred[i][0]*150), int(pred[i][1]*200)), 5, (0,0,0), -1)
-    cv2.imwrite('./markedval/' + str(i) + '.jpg', a)
+    cv2.imwrite('./TEST_marked/' + str(i) + '.jpg', a)
