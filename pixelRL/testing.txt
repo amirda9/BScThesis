@@ -1,0 +1,5 @@
+BSD68/gray/test/mi.jpg
+BSD68/gray/test/images.jpg
+BSD68/gray/test/im2.jpg
+BSD68/gray/test/im3.jpg
+BSD68/gray/test/im5.jpg
