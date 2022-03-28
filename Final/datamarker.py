@@ -68,6 +68,8 @@ for i in range(valF.shape[0]):
     a = cv2.flip(valF[i], 1)
     a = np.expand_dims(a, axis=2)
     print(a.shape)
-    a = cv2.circle(a, (int(valY[i][0]*150), int(valY[i][1]*200)), 5, (255,255,0), -1)
-    a = cv2.circle(a, (int(pred[i][0]*150), int(pred[i][1]*200)), 5, (0,0,255), -1)
+    # ground truth is white
+    a = cv2.circle(a, (int(valY[i][0]*150), int(valY[i][1]*200)), 5, (255,255,255), -1)
+    # pred is black
+    a = cv2.circle(a, (int(pred[i][0]*150), int(pred[i][1]*200)), 5, (0,0,0), -1)
     cv2.imwrite('./markedval/' + str(i) + '.jpg', a)

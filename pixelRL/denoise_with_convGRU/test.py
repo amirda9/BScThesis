@@ -14,7 +14,7 @@ from pixelwise_a3c import *
 TRAINING_DATA_PATH          = "../training_BSD68.txt"
 TESTING_DATA_PATH           = "../testing.txt"
 IMAGE_DIR_PATH              = "../"
-SAVE_PATH            = "./model/denoise_myfcn_"
+SAVE_PATH            = "../denoise_myfcn_"
  
 #_/_/_/ training parameters _/_/_/ 
 LEARNING_RATE    = 0.001
@@ -39,6 +39,9 @@ def test(loader, agent, fout):
     sum_reward = 0
     test_data_size = MiniBatchLoader.count_paths(TESTING_DATA_PATH)
     current_state = State.State((TEST_BATCH_SIZE,1,CROP_SIZE,CROP_SIZE), MOVE_RANGE)
+    print('\n')
+    print(range(0, test_data_size, TEST_BATCH_SIZE))
+    print('\n')
     for i in range(0, test_data_size, TEST_BATCH_SIZE):
         raw_x = loader.load_testing_data(np.array(range(i, i+TEST_BATCH_SIZE)))
         raw_n = np.random.normal(MEAN,SIGMA,raw_x.shape).astype(raw_x.dtype)/255

@@ -96,3 +96,4 @@ class MiniBatchLoader(object):
             raise RuntimeError("mini batch size must be 1 when testing")
  
         return xs
+
