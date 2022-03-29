@@ -43,9 +43,9 @@ def image_resize(image, width = None, height = None, inter = cv.INTER_AREA):
 cam_port = 0
 cam = cv.VideoCapture(cam_port)
 
-j=0
+j=800
 # capital x and y are click position
-while(j<800):
+while(j<5000):
     _, image = cam.read()
     img = image_resize(image,width=400)
     cv.imwrite("./data/"+str(j)+".jpg",img)

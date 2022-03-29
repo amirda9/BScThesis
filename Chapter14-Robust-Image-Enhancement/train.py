@@ -2,6 +2,10 @@ import argparse
 import os
 import random
 from datetime import datetime
+from tkinter import E
+import matplotlib.pyplot as plt
+import cv2
+import time
 
 import numpy as np
 from tqdm import tqdm
@@ -194,9 +198,12 @@ def train(option):
         os.mkdir(option.checkpoint_dir)
 
     train_pairs = []
-    with open('./train_pairs.txt') as f:
-        for line in f:
-            train_pairs.append(line.strip().split(','))
+    # with open('./train_pairs.txt') as f:
+    #     for line in f:
+    #         train_pairs.append(line.strip().split(','))
+    for i in range(0,4998):
+        train_pairs.append(['../RL/distortion/{}.jpg'.format(i),'../RL/data/{}.jpg'.format(i)])
+    print(len(train_pairs))
     train_env = Env(train_pairs)
 
     feature, actor, critic = get_networks()
@@ -205,26 +212,32 @@ def train(option):
     agent = Agent(feature, actor, critic, optimizer,
                   gae_lambda=option.gae_lambda, c2=option.c2)
     print('gets here \n')
-
+    history =[]
     for i_iter in range(1, option.max_iter + 1):
         print(i_iter)
         trajectories, r, maxr = agent.sample(train_env, option.episode_per_iter)
         print(i_iter)
         length = len(trajectories) * 1.0 / option.episode_per_iter
         entropy = agent.optimize(trajectories, option.opt_per_iter)
-        print('{} Iter {} Reward {:.4f}/{:.4f} entropy {:.4f} |T| {:.2f}'
-              .format(datetime.now(), i_iter, r, maxr, entropy, length))
+        print('{} Iter {}/{} Reward {:.4f}/{:.4f} entropy {:.4f} |T| {:.2f}'
+              .format(datetime.now(), i_iter,opt.max_iter, r, maxr, entropy, length))
+        history.append(r/maxr)
 
         if i_iter % 50 == 0:
             agent.save(option.checkpoint_dir)
+    for i in range(len(history)):
+        plt.scatter(i,history[i],color='red')
+    plt.show()
 
 
 def valid(option):
     """ Valid """
     pairs = []
-    with open(option.valid_path) as f:
-        for line in f:
-            pairs.append(line.strip().split('\t'))
+    # with open(option.valid_path) as f:
+    #     for line in f:
+    #         pairs.append(line.strip().split('\t'))
+    for i in range(1,3):
+        pairs.append(['../RL/distortion/{}.jpg'.format(i),'../RL/data/{}.jpg'.format(i)])
     n = len(pairs)
     feature, actor, critic = get_networks()
     agent = Agent(feature, actor, critic, None)
@@ -241,6 +254,11 @@ def valid(option):
         max_reward += e_r_max
         if step > 5:
             scores.append((reward, pair, env._rgb_state))
+            now = time.time()
+            # temp = env._rgb_state*255
+            cv2.imwrite('./res/{}.jpg'.format(now),env._rgb_state)
+            print(env._rgb_state)
+        print(scores)
     reward, step, max_reward = reward / n, step / n, max_reward / n
     print('Reward {:.4f} step {:.4f} max_reward {:.4f}'
           .format(reward, step, max_reward))
