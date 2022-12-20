@@ -1,4 +1,5 @@
 import cv2 as cv
+import os
 
 def image_resize(image, width = None, height = None, inter = cv.INTER_AREA):
     # initialize the dimensions of the image to be resized and
@@ -32,5 +33,21 @@ def image_resize(image, width = None, height = None, inter = cv.INTER_AREA):
     return resized
 
 
-cv.imwrite('raw_resized.jpg', image_resize(cv.imread('raw.jpg'), width=480))
-cv.imwrite('retouch_resized.jpg', image_resize(cv.imread('retouched.jpg'), width=480))
+# cv.imwrite('raw_resized.jpg', image_resize(cv.imread('raw.jpg'), width=480))
+# cv.imwrite('retouch_resized.jpg', image_resize(cv.imread('retouched.jpg'), width=480))
+
+
+files = os.listdir('../../Raw')
+files = sorted(files)
+for filename in files:
+    print(filename)
+    img = cv.imread('../../Raw/{}'.format(filename))
+    img2 = cv.imread('../../C/{}'.format(filename))
+    
+    if (img is not None and img2 is not None):
+        resized = image_resize(img,width=480)
+        cv.imwrite('../../Raw/{}'.format(filename),resized)
+
+        resized2 = image_resize(img2,width=480)
+        cv.imwrite('../../C/{}'.format(filename),resized2)
+    # train_pairs.append(['../../Raw/{}'.format(filename),'../../C/{}'.format(filename)])

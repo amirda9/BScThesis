@@ -81,6 +81,7 @@ class Agent(object):
             while True:
                 a, logp, v = self.act(s, greedy)
                 s_, r, done, info = env.step(a)
+                print(info)
                 e_reward += r
                 values.append(v)
                 trajectories.append([s, a, r, logp, v])
@@ -101,6 +102,8 @@ class Agent(object):
                 trajectories[-(episode_len - i)][2] = gae[i] + values[i]
         e_reward /= sample_episodes
         e_reward_max /= sample_episodes
+        print('gets here2')
+
         return trajectories, e_reward, e_reward_max
 
     def _train_func(self, b_s, b_a, b_r, b_logp_old, b_v_old):
@@ -201,8 +204,11 @@ def train(option):
     # with open('./train_pairs.txt') as f:
     #     for line in f:
     #         train_pairs.append(line.strip().split(','))
-    for i in range(0,4998):
-        train_pairs.append(['../RL/distortion/{}.jpg'.format(i),'../RL/data/{}.jpg'.format(i)])
+    files = os.listdir('../../Raw')
+    files = sorted(files)
+    files = files[:2000]
+    for filename in files:
+        train_pairs.append(['../../Raw/{}'.format(filename),'../../C/{}'.format(filename)])
     print(len(train_pairs))
     train_env = Env(train_pairs)
 
@@ -214,14 +220,17 @@ def train(option):
     print('gets here \n')
     history =[]
     for i_iter in range(1, option.max_iter + 1):
-        print(i_iter)
-        trajectories, r, maxr = agent.sample(train_env, option.episode_per_iter)
-        print(i_iter)
-        length = len(trajectories) * 1.0 / option.episode_per_iter
-        entropy = agent.optimize(trajectories, option.opt_per_iter)
-        print('{} Iter {}/{} Reward {:.4f}/{:.4f} entropy {:.4f} |T| {:.2f}'
-              .format(datetime.now(), i_iter,opt.max_iter, r, maxr, entropy, length))
-        history.append(r/maxr)
+        try:
+            print(i_iter)
+            trajectories, r, maxr = agent.sample(train_env, option.episode_per_iter)
+            print(i_iter)
+            length = len(trajectories) * 1.0 / option.episode_per_iter
+            entropy = agent.optimize(trajectories, option.opt_per_iter)
+            print('{} Iter {}/{} Reward {:.4f}/{:.4f} entropy {:.4f} |T| {:.2f}'
+                .format(datetime.now(), i_iter,opt.max_iter, r, maxr, entropy, length))
+            history.append(r/maxr)
+        except:
+            print('Error')
 
         if i_iter % 50 == 0:
             agent.save(option.checkpoint_dir)
@@ -236,8 +245,11 @@ def valid(option):
     # with open(option.valid_path) as f:
     #     for line in f:
     #         pairs.append(line.strip().split('\t'))
-    for i in range(1,3):
-        pairs.append(['../RL/distortion/{}.jpg'.format(i),'../RL/data/{}.jpg'.format(i)])
+    pairs.append(['../../Fast Food Data/Training Data/Burger/Burger-Train (772).jpeg','../../Fast Food Data/Training Data/Burger/Burger-Train (772).jpeg'])
+    pairs.append(['../../FF400/Training Data/Pizza/Pizza-Train (802).jpeg','../../FF400/Training Data/Pizza/Pizza-Train (802).jpeg.jpeg'])
+    pairs.append(['../../Fast Food Data/Training Data/Sandwich/Sandwich-Train (108).jpeg','../../Fast Food Data/Training Data/Sandwich/Sandwich-Train (108).jpeg'])
+    # for i in range(1,3):
+    #     pairs.append(['../../FF400/{}.jpg'.format(i),'../../FF400/{}.jpg'.format(i+1)'])
     n = len(pairs)
     feature, actor, critic = get_networks()
     agent = Agent(feature, actor, critic, None)
@@ -255,8 +267,9 @@ def valid(option):
         if step > 5:
             scores.append((reward, pair, env._rgb_state))
             now = time.time()
-            # temp = env._rgb_state*255
-            cv2.imwrite('./res/{}.jpg'.format(now),env._rgb_state)
+            temp = env._rgb_state
+            temp = cv2.cvtColor(temp, cv2.COLOR_BGR2RGB)
+            cv2.imwrite('./{}.jpg'.format(now),temp)
             print(env._rgb_state)
         print(scores)
     reward, step, max_reward = reward / n, step / n, max_reward / n
@@ -279,7 +292,7 @@ if __name__ == '__main__':
     parser.add_argument('--opt_per_iter',
                         help='optimize per sample', type=int, default=2)
     parser.add_argument('--max_iter',
-                        help='training iter number', type=int, default=10000)
+                        help='training iter number', type=int, default=2000)
     parser.add_argument('--lr', type=float,
                         default=1e-5, help='initial learning rate')
     parser.add_argument('--clipnorm',
